@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: seven-winds-budget
+
+  docker:
+    compose:
+      enabled: false
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+
+  datasource:
+    username: dev
+    password: dev
+    url: jdbc:postgresql://localhost:45533/dev_mem
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.xml
+
+server:
+  port: 8080
+  address: localhost
+
+app:
+  url: http://${server.address}:${server.port}/
+
+springdoc:
+  swagger-ui:
+    path: index.html

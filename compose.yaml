@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    container_name: dev_mem
+    restart: always
+    environment:
+      POSTGRES_DB: dev_mem
+      POSTGRES_PASSWORD: dev
+      POSTGRES_USER: dev
+    ports:
+      - '45533:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d dev_mem"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  db_data:
+
+networks:
+  backend:
+    driver: bridge
