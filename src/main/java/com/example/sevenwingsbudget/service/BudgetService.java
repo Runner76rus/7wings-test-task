@@ -7,6 +7,7 @@ import com.example.sevenwingsbudget.exception.NotFoundException;
 import com.example.sevenwingsbudget.mapper.BudgetMapper;
 import com.example.sevenwingsbudget.model.Author;
 import com.example.sevenwingsbudget.model.Budget;
+import com.example.sevenwingsbudget.model.TypeAmountProjection;
 import com.example.sevenwingsbudget.repository.AuthorRepository;
 import com.example.sevenwingsbudget.repository.BudgetRepository;
 import jakarta.persistence.criteria.Join;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +53,10 @@ public class BudgetService {
             );
         }
 
+        System.out.printf("Offset %s, limit %s\n",pageable.getOffset(),pageable.getPageSize());
         Page<Budget> page = budgetRepository.findAll(spec, pageable);
-        return budgetMapper.toBudgetYearsResponseStats(page);
+
+        List<TypeAmountProjection>  statistic = budgetRepository.findTotalStatisticByBudgetType(year);
+        return budgetMapper.toBudgetYearsResponseStats(page,statistic);
     }
 }
