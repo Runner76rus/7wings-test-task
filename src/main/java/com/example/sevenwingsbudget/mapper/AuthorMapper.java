@@ -8,6 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface AuthorMapper {
 
-    @Mapping(target = "createdAt", expression = "java(author.getCreatedAt().toString())")
+//    @Mapping(target = "createdAt", expression = "java(author.getCreatedAt().toString())")
     AuthorResponse toAuthorResponse(Author author);
 }

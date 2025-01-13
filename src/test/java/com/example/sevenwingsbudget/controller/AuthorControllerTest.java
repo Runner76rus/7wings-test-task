@@ -2,7 +2,6 @@ package com.example.sevenwingsbudget.controller;
 
 import com.example.sevenwingsbudget.dto.response.AuthorResponse;
 import com.example.sevenwingsbudget.service.AuthorService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +25,8 @@ class AuthorControllerTest {
     @MockitoBean
     private AuthorService authorService;
 
-    @Autowired
-    private ObjectMapper objectMapper; // для преобразования объектов в JSON (если потребуется)
-
     @Test
     void save_ShouldReturnAuthorResponse_WhenFullNameIsValid() throws Exception {
-        // Мок ответа от сервиса
         AuthorResponse mockResponse = new AuthorResponse(1L,"John Doe","2025-01-12T10:00:00");
 
         Mockito.when(authorService.save(anyString())).thenReturn(mockResponse);

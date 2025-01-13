@@ -20,7 +20,8 @@ public interface BudgetMapper {
     BudgetResponse toBudgetResponse(Budget budget);
 
     @Mapping(target = "author", expression = ("java(author)"))
-    Budget toBudget(BudgetRequest budgetResponse, Author author);
+//    @Mapping(source = "budgetRequest.year", target = "year")
+    Budget toBudget(BudgetRequest budgetRequest, Author author);
 
     default BudgetYearStatsResponse toBudgetYearsResponseStats(Page<Budget> page){
         return new BudgetYearStatsResponse(page.getTotalPages(),
