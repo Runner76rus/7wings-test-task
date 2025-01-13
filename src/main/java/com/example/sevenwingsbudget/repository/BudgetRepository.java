@@ -15,6 +15,6 @@ public interface BudgetRepository extends JpaRepository<Budget, Long>, JpaSpecif
     @Query("SELECT b.type AS type, SUM(b.amount) AS totalAmount " +
             "FROM Budget b " +
             "WHERE :year = b.year " +
-            "GROUP BY b.type")
+            "GROUP BY b.type ")
     List<TypeAmountProjection> findTotalStatisticByBudgetType(int year);
 }

@@ -27,9 +27,6 @@ public interface BudgetMapper {
     Budget toBudget(BudgetRequest budgetRequest, Author author);
 
     default BudgetYearStatsResponse toBudgetYearsResponseStats(Page<Budget> page, List<TypeAmountProjection> statistic) {
-        page.getContent().forEach(System.out::println);
-        System.out.println("Get total elements " + page.getTotalElements());
-        System.out.println("Get total pages" + page.getTotalPages());
         return new BudgetYearStatsResponse(page.getTotalElements(),
                 statistic.stream()
                         .collect(Collectors.toMap(

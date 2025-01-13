@@ -4,4 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public record BudgetYearStatsResponse(long total, Map<String,Integer> totalByType, List<BudgetResponse> items){}
+public record BudgetYearStatsResponse(long total,
+                                      Map<String, Integer> totalByType,
+                                      List<BudgetResponse> items) {
+}

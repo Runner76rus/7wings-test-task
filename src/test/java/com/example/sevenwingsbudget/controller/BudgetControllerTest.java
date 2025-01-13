@@ -1,7 +1,6 @@
 package com.example.sevenwingsbudget.controller;
 
 import com.example.sevenwingsbudget.TestcontainersConfiguration;
-import com.example.sevenwingsbudget.mapper.BudgetMapper;
 import com.example.sevenwingsbudget.model.Budget;
 import com.example.sevenwingsbudget.model.BudgetType;
 import com.example.sevenwingsbudget.repository.BudgetRepository;
@@ -28,27 +27,32 @@ class BudgetControllerTest {
     @Autowired
     private BudgetRepository budgetRepository;
 
-    @Autowired
-    private BudgetMapper budgetMapper;
-
     @BeforeEach
     void setUp() {
         budgetRepository.deleteAll();
     }
 
-//    addRecord(new Budget(2020, 5, 100, BudgetType.Приход));
-//    addRecord(new Budget(2020, 1, 5, BudgetType.Приход));
-//    addRecord(new Budget(2020, 5, 50, BudgetType.Приход));
-//    addRecord(new Budget(2020, 1, 30, BudgetType.Приход));
-//    addRecord(new Budget(2020, 5, 400, BudgetType.Приход));
 
-//    addRecord(BudgetRecord(2020, 5, 10, BudgetType.Приход))
-//    addRecord(BudgetRecord(2020, 5, 5, BudgetType.Приход))
-//    addRecord(BudgetRecord(2020, 5, 20, BudgetType.Приход))
-//    addRecord(BudgetRecord(2020, 5, 30, BudgetType.Приход))
-//    addRecord(BudgetRecord(2020, 5, 40, BudgetType.Приход))
-//    addRecord(BudgetRecord(2030, 1, 1, BudgetType.Расход))
+    @Test
+    void testStatsSortOrder() throws Exception {
+        addRecord(new Budget(2020, 5, 100, BudgetType.Приход));
+        addRecord(new Budget(2020, 1, 5, BudgetType.Приход));
+        addRecord(new Budget(2020, 5, 50, BudgetType.Приход));
+        addRecord(new Budget(2020, 1, 30, BudgetType.Приход));
+        addRecord(new Budget(2020, 5, 400, BudgetType.Приход));
 
+        mockMvc.perform(get("/budget/year/2020/stats?limit=100&offset=0")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON),
+                        status().isOk(),
+                        jsonPath("$.items[0].amount").value(30),
+                        jsonPath("$.items[1].amount").value(5),
+                        jsonPath("$.items[2].amount").value(400),
+                        jsonPath("$.items[3].amount").value(100),
+                        jsonPath("$.items[4].amount").value(50)
+                );
+    }
 
     @Test
     void testBudgetPagination() throws Exception {
@@ -60,9 +64,9 @@ class BudgetControllerTest {
         addRecord(new Budget(2030, 1, 1, BudgetType.Приход));
 
         mockMvc.perform(get("/budget/year/2020/stats")
-                .param("size","3")
-                .param("offset","1")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .param("size", "3")
+                        .param("offset", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(
                         content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON),
                         status().isOk(),
@@ -72,7 +76,7 @@ class BudgetControllerTest {
                 );
     }
 
-    private void addRecord(Budget record){
+    private void addRecord(Budget record) {
         budgetRepository.save(record);
     }
 }

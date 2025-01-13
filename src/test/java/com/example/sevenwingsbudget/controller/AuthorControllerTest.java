@@ -26,24 +26,25 @@ class AuthorControllerTest {
     private AuthorService authorService;
 
     @Test
-    void save_ShouldReturnAuthorResponse_WhenFullNameIsValid() throws Exception {
-        AuthorResponse mockResponse = new AuthorResponse(1L,"John Doe","2025-01-12T10:00:00");
+    void testSave_WhenFullNameIsValid() throws Exception {
+        AuthorResponse mockResponse = new AuthorResponse(
+                1L,"Yazgevich Anton Alexandrovich","2025-01-12T10:00:00");
 
         Mockito.when(authorService.save(anyString())).thenReturn(mockResponse);
 
         mockMvc.perform(get("/author")
-                        .param("fullName", "John Doe")
+                        .param("fullName", "Yazgevich Anton Alexandrovich")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.fullName").value("John Doe"))
+                .andExpect(jsonPath("$.fullName").value("Yazgevich Anton Alexandrovich"))
                 .andExpect(jsonPath("$.createdAt").value("2025-01-12T10:00:00"));
 
-        Mockito.verify(authorService).save("John Doe");
+        Mockito.verify(authorService).save("Yazgevich Anton Alexandrovich");
     }
 
     @Test
-    void save_ShouldReturnBadRequest_WhenFullNameIsTooShort() throws Exception {
+    void testValidationFullName_WhenTooShort() throws Exception {
         mockMvc.perform(get("/author")
                         .param("fullName", "Short")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -51,7 +52,7 @@ class AuthorControllerTest {
     }
 
     @Test
-    void save_ShouldReturnBadRequest_WhenFullNameIsTooLong() throws Exception {
+    void testValidationFullName_WhenTooLong() throws Exception {
         String tooLongName = "a".repeat(129);
 
         mockMvc.perform(get("/author")
